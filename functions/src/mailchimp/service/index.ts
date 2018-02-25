@@ -1,14 +1,11 @@
 const rp = require('request-promise');
+import * as functions from 'firebase-functions';
 
 const mailchimpInstance   = 'us17',
-      listUniqueId        = '16d431dbbc',
-      mailchimpApiKey     = '67fd4a28b6de23322c13e2f2985f60e5-us17';
+      listUniqueId        = functions.config().mailchimp.listid,
+      mailchimpApiKey     = functions.config().mailchimp.apikey;
 
 export const updateSubscriberListService = async (email, first, last) => {
-  console.log("DDDODOOIIING EMAIL CALLL---------------")
-  console.log(email)
-  console.log(first)
-  console.log(last)
   const mail = email
   const firstName = first
   const lastName = last
@@ -42,7 +39,6 @@ export const updateSubscriberListService = async (email, first, last) => {
         return {message: 'EXISTING_MEMBER', ok:false}
       }
     }
-    console.log(e)
     return {message: 'GENERAL_ERROR', ok:false}
   }
 
