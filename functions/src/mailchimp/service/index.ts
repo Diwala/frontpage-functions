@@ -5,6 +5,10 @@ const mailchimpInstance   = 'us17',
       mailchimpApiKey     = '67fd4a28b6de23322c13e2f2985f60e5-us17';
 
 export const updateSubscriberListService = async (email, first, last) => {
+  console.log("DDDODOOIIING EMAIL CALLL---------------")
+  console.log(email)
+  console.log(first)
+  console.log(last)
   const mail = email
   const firstName = first
   const lastName = last
@@ -31,13 +35,15 @@ export const updateSubscriberListService = async (email, first, last) => {
 
   try {
     const res = await rp(options)
-    if (res.status < 300 || (res.status === 400 && res.body.title === "Member Exists")) {
-      return true
-    } else {
-      return false
-    }
+    return {message:'ok', ok:true};
   } catch (e) {
-    throw e;
+    if(e.statusCode === 400) {
+      if(e.error.title === 'Member Exists') {
+        return {message: 'EXISTING_MEMBER', ok:false}
+      }
+    }
+    console.log(e)
+    return {message: 'GENERAL_ERROR', ok:false}
   }
 
 };
