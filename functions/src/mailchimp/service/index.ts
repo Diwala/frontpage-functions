@@ -2,14 +2,13 @@ const rp = require('request-promise');
 import * as functions from 'firebase-functions';
 
 const mailchimpInstance   = 'us17',
-      listUniqueId        = functions.config().mailchimp.listid,
       mailchimpApiKey     = functions.config().mailchimp.apikey;
 
-export const updateSubscriberListService = async (email, first, last) => {
+export const updateSubscriberListService = async (email, first, last, company, listId) => {
   const mail = email
   const firstName = first
   const lastName = last
-  const url = 'https://' + mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + listUniqueId + '/members/';
+  const url = 'https://' + mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + listId + '/members/';
   const auth = 'Basic ' + new Buffer('any:' + mailchimpApiKey ).toString('base64');
   const options = {
     method: 'POST',
@@ -25,7 +24,8 @@ export const updateSubscriberListService = async (email, first, last) => {
       'status': 'subscribed',
       'merge_fields': {
         'FNAME': firstName,
-        'LNAME': lastName
+        'LNAME': lastName,
+        'COMPANY': company
       }
     }
   };
